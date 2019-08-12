@@ -27,7 +27,12 @@ export const TextEditor = ({ value: initialValue, onChange, debounceDelay = 0, c
             <textarea
                 className="text-editor__text-area"
                 onChange={handleChange}
-                value={value}/>
+                value={value}
+                autoCapitalize="off"
+                autoCorrect="off"
+                autoComplete="off"
+                spellCheck="false"
+            />
         </div>
     )
 };
