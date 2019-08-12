@@ -2,7 +2,7 @@
 
 ## Screencap
 
-![](https://raw.githubusercontent.com/Vitaly-Rudenko/json-editor/master/screencap.gif)
+![](https://raw.githubusercontent.com/Vitaly-Rudenko/json-editor/develop/screencap.gif)
 
 ## TODO
 
