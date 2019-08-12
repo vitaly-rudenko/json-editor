@@ -1,6 +1,17 @@
 import React from 'react';
-import { stringify } from '../utils/stringify';
 import './FieldBlock.css';
+
+const stringify = (value) => {
+    if (typeof value === 'string') {
+        return '"' + value + '"';
+    }
+
+    if (value === undefined) {
+        return '{}';
+    }
+
+    return String(value);
+};
 
 const levelColors = [0xcfe2f1, 0xfeffa0, 0xf3d1d4, 0xcfffd0];
 
