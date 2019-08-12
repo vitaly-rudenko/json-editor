@@ -1,5 +1,9 @@
 # Visual JSON editor
 
+## Screencap
+
+![](https://raw.githubusercontent.com/Vitaly-Rudenko/json-editor/master/screencap.gif)
+
 ## TODO
 
  - [Restriction] Same key problem,
