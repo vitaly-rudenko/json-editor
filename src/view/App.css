@@ -7,11 +7,11 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    margin: 40px;
 }
 
 .app {
     display: flex;
+    padding: 40px;
 }
 
 .app > *:not(:last-child) {
