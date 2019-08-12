@@ -1,112 +1,11 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import shortid from 'shortid';
-import './styles.css';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-const Type = {
-    PRIMITIVE: 'primitive',
-    OBJECT: 'object',
-};
-
-const isObject = (value) => {
-    return typeof value === 'object' && value !== null;
-};
-
-class Field {
-    /** @type {string} */ id;
-    /** @type {string} */ type;
-    /** @type {string[]} */ parentChain;
-    /** @type {string} */ key;
-    /** @type {any} */ value;
-
-    constructor(source) {
-        this.id = source.id || shortid();
-        this.type = source.type || (isObject(source.value) ? Type.OBJECT : Type.PRIMITIVE);
-        this.parentChain = source.parentChain;
-        this.key = source.key;
-        this.value = isObject(source.value) ? undefined : source.value;
-    }
-
-    get level() {
-        return this.parentChain.length;
-    }
-}
-
-const flatten = (object, parentChain = []) => {
-    const fields = [];
-
-    for (const [key, value] of Object.entries(object)) {
-        fields.push(
-            new Field({
-                key, value, parentChain,
-            })
-        );
-
-        if (isObject(value)) {
-            fields.push(
-                ...flatten(value, [...parentChain, key])
-            );
-        }
-    }
-
-    return fields;
-};
-
-/** @param {Field[]} fields */
-const buildObject = (fields) => {
-    const result = {};
-
-    for (const field of fields) {
-        let parent = result;
-
-        for (const parentKey of field.parentChain) {
-            if (parent[parentKey] === undefined) {
-                parent[parentKey] = {};
-            }
-
-            parent = parent[parentKey];
-        }
-
-        parent[field.key] = field.value === undefined ? {} : field.value;
-    }
-
-    return result;
-};
-
-const levelColors = [0xcfe2f1, 0xfeffa0, 0xf3d1d4, 0xcfffd0];
-
-const stringify = (value) => {
-    if (typeof value === 'string') {
-        return '"' + value + '"';
-    }
-
-    if (value === undefined) {
-        return '{}';
-    }
-
-    return String(value);
-};
-
-const Node = React.forwardRef(
-    /** @param {{ field: Field }} props */
-    ({ field, index = 0, onDrag, ...props }, ref) => {
-        return (
-            <div
-                ref={ref}
-                {...props}
-                className="node"
-                style={{
-                    ...props.style || {},
-                    marginLeft: `${field.level * 16}px`,
-                    backgroundColor:
-                        '#' + levelColors[field.level % levelColors.length].toString(16)
-                }}
-            >
-                {field.key}: {stringify(field.value)}
-            </div>
-        );
-    }
-);
+import { flattenObject } from '../model/flattenObject';
+import { buildObject } from '../model/buildObject';
+import { FieldType } from '../model/FieldType';
+import { Field } from '../model/Field';
+import { FieldBlock } from './FieldBlock';
+import './App.css';
 
 const object = {
     hello: 'world',
@@ -133,7 +32,7 @@ const object = {
 
 export const App = () => {
     /** @type {[Field[], (fields: Field[]) => void]} */
-    const [fields, setFields] = useState(flatten(object));
+    const [fields, setFields] = useState(flattenObject(object));
     const objectRepresentation = useMemo(
         () => JSON.stringify(buildObject(fields), null, 4),
         [fields]
@@ -165,7 +64,7 @@ export const App = () => {
 
         const children = [];        
         const chain = [...field.parentChain, field.key];
-        if (field.type === Type.OBJECT) {
+        if (field.type === FieldType.OBJECT) {
             for (const field of fields) {
                 if (field.parentChain.toString().startsWith(chain.toString())) {
                     children.push(field);
@@ -221,7 +120,7 @@ export const App = () => {
                                         draggableId={field.id}
                                         index={index}>
                                         {(provided) => (
-                                            <Node
+                                            <FieldBlock
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}

@@ -1,0 +1,22 @@
+.node-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.representation {
+    margin-top: 20px;
+    width: 400px;
+    height: 350px;
+
+    animation: fade-in 0.2s;
+}
+
+@keyframes fade-in {
+    from {
+        color: white;
+    }
+    to {
+        color: black;
+    }
+}
