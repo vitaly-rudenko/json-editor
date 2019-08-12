@@ -1,16 +1,26 @@
-.representation {
-    margin-top: 20px;
-    width: 400px;
-    height: 350px;
-
-    animation: fade-in 0.2s;
+body {
+    margin: 0;
 }
 
-@keyframes fade-in {
-    from {
-        color: white;
-    }
-    to {
-        color: black;
-    }
+.app-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.app {
+    display: flex;
+}
+
+.app > *:not(:last-child) {
+    margin-right: 80px;
+}
+
+.app__field-list {
+    min-width: 200px;
+}
+
+.app__json-editor {
+    min-width: 400px;
 }

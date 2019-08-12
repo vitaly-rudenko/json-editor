@@ -5,7 +5,7 @@ import { Field } from '../model/Field';
 import { FieldBlock } from './FieldBlock';
 import './FieldList.css';
 
-export const FieldList = ({ fields, onFieldsUpdate }) => {
+export const FieldList = ({ fields, onFieldsUpdate, className = '' }) => {
     const onDragEnd = useCallback((result) => {
         if (!result.destination) {
             return;
@@ -39,6 +39,7 @@ export const FieldList = ({ fields, onFieldsUpdate }) => {
         // TODO: same key problem
         // TODO: move object inside itself
         // TODO: move inside empty object
+        // TODO: array support
 
         const updatedField = new Field(field);
         updatedField.parentChain = destinationSample.parentChain;
@@ -75,7 +76,7 @@ export const FieldList = ({ fields, onFieldsUpdate }) => {
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className="field-list">
+                        className={`field-list ${className}`}>
                         {fields.map((field, index) => (
                             <Draggable
                                 key={field.id}
@@ -83,6 +84,7 @@ export const FieldList = ({ fields, onFieldsUpdate }) => {
                                 index={index}>
                                 {(provided) => (
                                     <FieldBlock
+                                        className="field-list__field-block"
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}

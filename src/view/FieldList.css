@@ -3,3 +3,7 @@
     flex-direction: column;
     align-items: flex-start;
 }
+
+.field-list__field-block {
+    max-width: 400px;
+}
