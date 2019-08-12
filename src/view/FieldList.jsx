@@ -36,11 +36,6 @@ export const FieldList = ({ fields, onFieldsUpdate, className = '' }) => {
             }
         }
 
-        // TODO: same key problem
-        // TODO: move object inside itself
-        // TODO: move inside empty object
-        // TODO: array support
-
         const updatedField = new Field(field);
         updatedField.parentChain = destinationSample.parentChain;
 
