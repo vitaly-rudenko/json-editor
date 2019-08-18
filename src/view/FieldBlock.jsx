@@ -1,16 +1,17 @@
 import React from 'react';
 import './FieldBlock.css';
+import { FieldType } from '../model/FieldType';
 
-const stringify = (value) => {
-    if (typeof value === 'string') {
-        return '"' + value + '"';
+const stringify = (field) => {
+    if (field.type === FieldType.PRIMITIVE) {
+        if (typeof field.value === 'string') {
+            return '"' + field.value + '"';
+        }
+
+        return String(field.value);
     }
 
-    if (value === undefined) {
-        return '{}';
-    }
-
-    return String(value);
+    return field.type === FieldType.ARRAY ? '[' : '{';
 };
 
 const levelColors = [0xcfe2f1, 0xfeffa0, 0xf3d1d4, 0xcfffd0];
@@ -30,7 +31,7 @@ export const FieldBlock = React.memo(React.forwardRef(
                         '#' + levelColors[field.level % levelColors.length].toString(16)
                 }}
             >
-                {field.key}: {stringify(field.value)}
+                {!field.isArrayItem && `${field.key}:`} {stringify(field)}
             </div>
         );
     }

@@ -1,38 +1,49 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './TextEditor.css';
-import { debounce } from '../utils/debounce';
 
-export const TextEditor = ({ value: initialValue, onChange, debounceDelay = 0, className = '' }) => {
-    const [value, setValue] = React.useState(initialValue);
-    const revert = React.useCallback(() => setValue(initialValue), [initialValue]);
+export const TextEditor = ({ value: initialValue, onChange, className = '' }) => {
+    const [value, setValue] = useState(initialValue);
+    const [isFocused, setIsFocused] = useState(true);
+    const revert = useCallback(() => setValue(initialValue), [initialValue]);
 
-    const debouncedChangeDispatch = React.useMemo(() => {
-        const callback = (value) => onChange(value, revert);
-        return debounceDelay > 0 ? debounce(callback, debounceDelay) : callback;
-    }, [debounceDelay, onChange, revert]);
-
-    React.useEffect(() => {
+    useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
 
-    const handleChange = React.useCallback((event) => {
+    const handleChange = useCallback((event) => {
         const value = event.target.value;
 
         setValue(value);
-        debouncedChangeDispatch(value, initialValue);
-    }, [setValue, debouncedChangeDispatch, initialValue]);
+    }, [setValue]);
+
+    const handleFocus = useCallback(() => {
+        setIsFocused(true);
+    }, [setIsFocused]);
+
+    const handleBlur = useCallback((event) => {
+        const value = event.target.value;
+
+        setIsFocused(false);
+        
+        if (value !== initialValue) {
+            onChange(value, revert);
+        }
+    }, [initialValue, onChange, revert]);
 
     return (
         <div className={`text-editor ${className}`}>
             <textarea
-                className="text-editor__text-area"
+                className={['text-editor__text-area', isFocused && 'text-editor__text-area--focused'].filter(Boolean).join(' ')}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
                 value={value}
                 autoCapitalize="off"
                 autoCorrect="off"
                 autoComplete="off"
                 spellCheck="false"
             />
+            {isFocused && <div className="text-editor__apply-notice">Click outside to apply changes</div>}
         </div>
     )
 };

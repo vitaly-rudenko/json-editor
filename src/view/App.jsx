@@ -1,44 +1,79 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { flattenObject } from '../model/flattenObject';
-import { buildObject } from '../model/buildObject';
 import { FieldList } from './FieldList';
-import './App.css';
 import { TextEditor } from './TextEditor';
+import './App.css';
+import { ObjectBuilder } from '../model/ObjectBuilder';
+import { FieldListBuilder } from '../model/FieldListBuilder';
+
+// const object = {
+//     hello: 'world',
+//     isEnabled: true,
+//     nested: {
+//         lorem: 'ipsum',
+//         secretNumber: 123,
+//         nested2: {
+//             jon: 'snow'
+//         },
+//         array: [1,2,[3,4,5,[6,7]],8,9,{
+//             hello: 'world',
+//             array2: [{
+//                 isEnabled3: true,
+//                 nested5: {
+//                     lorem3: 'ipsum',
+//                     secretNumber3: 123,
+//                     nested6: {
+//                         jon: 'snow'
+//                     }
+//                 }
+//             }]
+//         }]
+//     },
+//     inception: {
+//         hello2: 'world',
+//         isEnabled2: true,
+//         nested3: {
+//             lorem2: 'ipsum',
+//             secretNumber2: 123,
+//             nested4: {
+//                 jon: 'snow'
+//             }
+//         }
+//     },
+// };
 
 const object = {
-    hello: 'world',
-    isEnabled: true,
-    nested: {
-        lorem: 'ipsum',
-        secretNumber: 123,
-        nested2: {
-            jon: 'snow'
-        }
+    a: {
+        b: true,
+        c: {
+            hello: 'world'
+        },
+        d: 'hey there',
+        e: 123
     },
-    inception: {
-        hello2: 'world',
-        isEnabled2: true,
-        nested3: {
-            lorem2: 'ipsum',
-            secretNumber2: 123,
-            nested4: {
-                jon: 'snow'
-            }
-        }
-    },
+    f: {
+        g: [1,2,3,4,5],
+        a: 'jon snow',
+    }
 };
 
 export const App = () => {
-    /** @type {[Field[], (fields: Field[]) => void]} */
-    const [fields, setFields] = useState(flattenObject(object));
-    const json = useMemo(
-        () => JSON.stringify(buildObject(fields), null, 4),
-        [fields]
+    /** @type {[FieldList, (value: FieldList) => void]} */
+    const [fieldList, setFieldList] = useState(
+        new FieldListBuilder().setSource(object).build()
     );
 
-    const handleFieldsUpdate = useCallback((updatedFields) => {
-        setFields(updatedFields);
-    }, [setFields]);
+    const json = useMemo(
+        () => JSON.stringify(
+            new ObjectBuilder().setFieldList(fieldList).build(),
+            null,
+            4
+        ),
+        [fieldList]
+    );
+
+    const handleFieldListUpdate = useCallback((updatedFieldList) => {
+        setFieldList(updatedFieldList);
+    }, [setFieldList]);
 
     const handleJsonChange = useCallback((updatedJson, revert) => {
         let object;
@@ -49,23 +84,24 @@ export const App = () => {
             return;
         }
 
-        setFields(flattenObject(object));
-    }, [setFields]);
+        setFieldList(
+            new FieldListBuilder().setSource(object).build()
+        );
+    }, [setFieldList]);
 
     return (
         <div className="app-wrapper">
             <div className="app">
                 <FieldList
                     className="app__field-list"
-                    fields={fields}
-                    onFieldsUpdate={handleFieldsUpdate}
+                    fieldList={fieldList}
+                    onFieldListUpdate={handleFieldListUpdate}
                 />
 
                 <TextEditor
                     className="app__json-editor"
                     value={json}
                     onChange={handleJsonChange}
-                    debounceDelay={1000}
                 />
             </div>
         </div>

@@ -14,4 +14,28 @@
 
     outline: none;
     resize: none;
+
+    transition:
+        box-shadow 0.2s ease-out,
+        background-color 0.2s ease-out;
+}
+
+.text-editor__text-area--focused {
+    box-shadow: 0px 10px 20px 0px #0000005d;
+    background-color: #20252c;
+}
+
+.text-editor__apply-notice {
+    font-family: monospace;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: -15px;
+    text-align: right;
+
+    animation: fade-in 0.5s;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
 }

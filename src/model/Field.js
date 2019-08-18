@@ -1,6 +1,6 @@
 import shortid from 'shortid';
-import { isObject } from '../utils/isObject';
 import { FieldType } from './FieldType';
+import { FieldUtil } from './FieldUtil';
 
 export class Field {
     /** @type {string} */ id;
@@ -8,13 +8,25 @@ export class Field {
     /** @type {string[]} */ parentChain;
     /** @type {string} */ key;
     /** @type {any} */ value;
+    /** @type {boolean} */ isArrayItem;
 
+    /** @param {Field | { key: string, value: any, parentChain?: string[], isArrayItem?: boolean }} source */
     constructor(source) {
-        this.id = source.id || shortid();
-        this.type = source.type || (isObject(source.value) ? FieldType.OBJECT : FieldType.PRIMITIVE);
-        this.parentChain = source.parentChain;
-        this.key = source.key;
-        this.value = isObject(source.value) ? undefined : source.value;
+        if (source instanceof Field) {
+            this.id = source.id;
+            this.type = source.type;
+            this.parentChain = [...source.parentChain];
+            this.key = source.key;
+            this.value = source.value;
+            this.isArrayItem = source.isArrayItem;
+        } else {
+            this.id = shortid();
+            this.type = FieldUtil.recognizeType(source.value);
+            this.parentChain = source.parentChain || [];
+            this.key = source.key;
+            this.value = this.type === FieldType.PRIMITIVE ? source.value : undefined;
+            this.isArrayItem = Boolean(source.isArrayItem);
+        }
     }
 
     get level() {
