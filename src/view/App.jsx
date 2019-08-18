@@ -59,12 +59,12 @@ const object = {
 export const App = () => {
     /** @type {[FieldList, (value: FieldList) => void]} */
     const [fieldList, setFieldList] = useState(
-        new FieldListBuilder().setSource(object).build()
+        FieldListBuilder.from(object)
     );
 
     const json = useMemo(
         () => JSON.stringify(
-            new ObjectBuilder().setFieldList(fieldList).build(),
+            ObjectBuilder.fromFieldList(fieldList),
             null,
             4
         ),
@@ -85,7 +85,7 @@ export const App = () => {
         }
 
         setFieldList(
-            new FieldListBuilder().setSource(object).build()
+            FieldListBuilder.from(object)
         );
     }, [setFieldList]);
 

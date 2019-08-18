@@ -2,19 +2,20 @@ import { Field } from './Field';
 import { FieldList } from './FieldList';
 
 export class FieldListBuilder {
-    build() {
-        if (Array.isArray(this.source)) {
+    /** @param {{ [x: string]: any } | any[]} source */
+    static from(source) {
+        if (Array.isArray(source)) {
             throw new Error('Arrays are not supported yet');
         }
 
-        if (!this.isPlainObject(this.source)) {
+        if (!this._isPlainObject(source)) {
             throw new Error('Source should be either an array or plain object');
         }
 
-        return new FieldList(this.fromObject(this.source));
+        return new FieldList(this._fromObject(source));
     }
 
-    fromArray(array, parentChain = []) {
+    static _fromArray(array, parentChain = []) {
         const fields = [];
     
         for (const [key, value] of array.entries()) {
@@ -26,13 +27,13 @@ export class FieldListBuilder {
     
             if (Array.isArray(value)) {
                 fields.push(
-                    ...this.fromArray(value, [...parentChain, key])
+                    ...this._fromArray(value, [...parentChain, key])
                 );
             }
     
-            if (this.isPlainObject(value)) {
+            if (this._isPlainObject(value)) {
                 fields.push(
-                    ...this.fromObject(value, [...parentChain, key])
+                    ...this._fromObject(value, [...parentChain, key])
                 );
             }
         }
@@ -40,7 +41,7 @@ export class FieldListBuilder {
         return fields;
     };
     
-    fromObject(object, parentChain = []) {
+    static _fromObject(object, parentChain = []) {
         const fields = [];
     
         for (const [key, value] of Object.entries(object)) {
@@ -52,13 +53,13 @@ export class FieldListBuilder {
     
             if (Array.isArray(value)) {
                 fields.push(
-                    ...this.fromArray(value, [...parentChain, key])
+                    ...this._fromArray(value, [...parentChain, key])
                 );
             }
     
-            if (this.isPlainObject(value)) {
+            if (this._isPlainObject(value)) {
                 fields.push(
-                    ...this.fromObject(value, [...parentChain, key])
+                    ...this._fromObject(value, [...parentChain, key])
                 );
             }
         }
@@ -66,17 +67,7 @@ export class FieldListBuilder {
         return fields;
     }
 
-    isPlainObject(value) {
+    static _isPlainObject(value) {
         return typeof value === 'object' && value !== null && !Array.isArray(value);
-    }
-
-    setSource(value) {
-        this._source = value;
-        return this;
-    }
-    
-    /** @returns {object | any[]} */
-    get source() {
-        return this._source;
     }
 }

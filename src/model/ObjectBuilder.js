@@ -1,14 +1,15 @@
 import { FieldType } from './FieldType';
 
 export class ObjectBuilder {
-    build() {
+    /** @param {import('./FieldList').FieldList} fieldList */
+    static fromFieldList(fieldList) {
         const result = {};
 
-        for (const field of this.fieldList.fields) {
+        for (const field of fieldList.fields) {
             console.log(`[${[...field.parentChain, field.key].join('.')}: ${field.value === undefined ? 'none': field.value} (${field.type}, item: ${field.isArrayItem})]`)
         }
 
-        for (const field of this.fieldList.fields) {
+        for (const field of fieldList.fields) {
             let parent = result;
 
             for (const [i, parentKey] of field.parentChain.entries()) {
@@ -33,15 +34,5 @@ export class ObjectBuilder {
         }
 
         return result;
-    }
-
-    setFieldList(value) {
-        this._fieldList = value;
-        return this;
-    }
-    
-    /** @returns {import('./FieldList').FieldList} */
-    get fieldList() {
-        return this._fieldList;
     }
 }
