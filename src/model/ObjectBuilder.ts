@@ -1,8 +1,8 @@
 import { FieldType } from './FieldType';
+import { FieldList } from './FieldList';
 
 export class ObjectBuilder {
-    /** @param {import('./FieldList').FieldList} fieldList */
-    static fromFieldList(fieldList) {
+    static fromFieldList(fieldList: FieldList): object {
         const result = {};
 
         for (const field of fieldList.fields) {
@@ -10,7 +10,7 @@ export class ObjectBuilder {
         }
 
         for (const field of fieldList.fields) {
-            let parent = result;
+            let parent: any = result;
 
             for (const [i, parentKey] of field.parentChain.entries()) {
                 if (parent[parentKey] === undefined) {

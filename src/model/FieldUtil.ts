@@ -1,7 +1,7 @@
 import { FieldType } from "./FieldType";
 
 export class FieldUtil {
-    static recognizeType(value) {
+    static recognizeType(value: any) {
         if (Array.isArray(value)) {
             return FieldType.ARRAY;
         }

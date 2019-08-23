@@ -1,11 +1,10 @@
-import { Field } from "./Field";
-import { FieldType } from "./FieldType";
+import { Field } from './Field';
+import { FieldType } from './FieldType';
 
 export class FieldList {
-    /** @type {Field[]} */ fields;
-    
-    /** @param {FieldList | Field[]} source */
-    constructor(source) {
+    fields: Field[];
+
+    constructor(source: FieldList | Field[]) {
         if (source instanceof FieldList) {
             this.fields = [...source.fields];
         } else {
@@ -13,11 +12,7 @@ export class FieldList {
         }
     }
 
-    /**
-     * @param {number} source
-     * @param {number} destination
-     */
-    move(source, destination) {
+    move(source: number, destination: number) {
         if (source === destination) {
             return this;
         }
@@ -30,7 +25,7 @@ export class FieldList {
 
         const destinationSample = afterDestination || beforeDestination;
 
-        const children = [];        
+        const children = [];
         const chain = [...field.parentChain, field.key];
         if (field.type === FieldType.OBJECT) {
             for (const field of this.fields) {
@@ -51,13 +46,13 @@ export class FieldList {
             updatedFields.splice(updatedFields.indexOf(child), 1);
         }
 
-        const updatedChildren = children.map((child) => {
+        const updatedChildren = children.map(child => {
             const updatedChild = new Field(child);
 
             updatedChild.parentChain = [
                 ...updatedField.parentChain,
                 updatedField.key,
-                ...child.parentChain.slice(chain.length)
+                ...child.parentChain.slice(chain.length),
             ];
 
             return updatedChild;

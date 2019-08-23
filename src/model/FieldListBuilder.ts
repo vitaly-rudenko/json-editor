@@ -1,9 +1,8 @@
-import { Field } from './Field';
+import { Field, ParentChain } from './Field';
 import { FieldList } from './FieldList';
 
 export class FieldListBuilder {
-    /** @param {{ [x: string]: any } | any[]} source */
-    static from(source) {
+    static from(source: { [x: string]: any } | any[]) {
         if (Array.isArray(source)) {
             throw new Error('Arrays are not supported yet');
         }
@@ -15,7 +14,7 @@ export class FieldListBuilder {
         return new FieldList(this._fromObject(source));
     }
 
-    static _fromArray(array, parentChain = []) {
+    static _fromArray(array: any[], parentChain: ParentChain = []): Field[] {
         const fields = [];
     
         for (const [key, value] of array.entries()) {
@@ -41,7 +40,7 @@ export class FieldListBuilder {
         return fields;
     };
     
-    static _fromObject(object, parentChain = []) {
+    static _fromObject(object: object, parentChain: ParentChain = []): Field[] {
         const fields = [];
     
         for (const [key, value] of Object.entries(object)) {
@@ -67,7 +66,7 @@ export class FieldListBuilder {
         return fields;
     }
 
-    static _isPlainObject(value) {
+    static _isPlainObject(value: any) {
         return typeof value === 'object' && value !== null && !Array.isArray(value);
     }
 }

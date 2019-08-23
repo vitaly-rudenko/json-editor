@@ -2,16 +2,23 @@ import shortid from 'shortid';
 import { FieldType } from './FieldType';
 import { FieldUtil } from './FieldUtil';
 
-export class Field {
-    /** @type {string} */ id;
-    /** @type {string} */ type;
-    /** @type {string[]} */ parentChain;
-    /** @type {string} */ key;
-    /** @type {any} */ value;
-    /** @type {boolean} */ isArrayItem;
+export type Key = string | number;
+export type ParentChain = Key[];
 
-    /** @param {Field | { key: string, value: any, parentChain?: string[], isArrayItem?: boolean }} source */
-    constructor(source) {
+export class Field {
+    id: string;
+    type: string;
+    parentChain: ParentChain;
+    key: Key;
+    value: any;
+    isArrayItem: boolean;
+
+    constructor(source: Field | {
+        key: Key,
+        value: any,
+        parentChain?: ParentChain,
+        isArrayItem?: boolean
+    }) {
         if (source instanceof Field) {
             this.id = source.id;
             this.type = source.type;
