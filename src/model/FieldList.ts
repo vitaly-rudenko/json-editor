@@ -33,21 +33,25 @@ export class FieldList {
             : this.indexOf(destinationIds[1]);
         
         if (sourceIndex < 0 || sourceIndex >= this.fields.length) {
-            throw new Error('Invalid source argument');
+            throw new Error('Invalid sourceId argument value');
+        }
+
+        if (precedingIndex === null && followingIndex === null) {
+            throw new Error('At least one of destinationIds values must not be null');
         }
 
         if (
             precedingIndex !== null
             && (precedingIndex < 0 || precedingIndex > this.fields.length)
         ) {
-            throw new Error('Invalid destination[0] argument');
+            throw new Error('Invalid destinationIds[0] argument value');
         }
 
         if (
             followingIndex !== null
             && (followingIndex < 0 || followingIndex > this.fields.length)
         ) {
-            throw new Error('Invalid destination[1] argument');
+            throw new Error('Invalid destinationIds[1] argument value');
         }
 
         if (sourceIndex === precedingIndex) {
@@ -126,6 +130,17 @@ export class FieldList {
                 updatedSource.parentChain = commonChain;
             } else {
                 updatedSource.parentChain = [];
+            }
+        }
+
+        if (!updatedSource.isArrayItem) {
+            const siblings = this.getSiblings(updatedSource);
+
+            if (siblings.some(s => s.key === updatedSource.key)) {
+                throw new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move the field due to key overlap'
+                }); 
             }
         }
 
@@ -213,7 +228,7 @@ export class FieldList {
         )) || null;
     }
 
-    getSiblings(field: Field, { includeSelf = false }, fields = this.fields) {
+    getSiblings(field: Field, { includeSelf = false } = {}, fields = this.fields) {
         return fields.filter(
             f => this.equals(f.parentChain, field.parentChain) && (includeSelf || f.id !== field.id)
         );

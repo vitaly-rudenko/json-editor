@@ -43,12 +43,12 @@ export class Field {
         return this.type === FieldType.OBJECT;
     }
 
-    get isContainer() {
-        return this.isArray || this.isObject;
-    }
-
     get isPrimitive() {
         return this.type === FieldType.PRIMITIVE;
+    }
+
+    get isContainer() {
+        return this.isArray || this.isObject;
     }
 
     get type() {

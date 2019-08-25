@@ -217,5 +217,98 @@ describe('moveField()', () => {
                 }));
             });
         });
+
+        describe('when moving a field to an object with the same field key', () => {
+            let fieldList;
+
+            beforeEach(() => {
+                fieldList = new FieldList([
+                    new Field({
+                        id: 'field-1',
+                        key: 'a', value: 1,
+                    }),
+                    new Field({
+                        id: 'field-2',
+                        key: 'b', value: 2,
+                    }),
+                    new Field({
+                        id: 'field-3',
+                        key: 'c', value: {},
+                    }),
+                    new Field({
+                        id: 'field-3-1',
+                        key: 'a', value: 1,
+                        parentChain: ['c']
+                    }),
+                    new Field({
+                        id: 'field-3-2',
+                        key: 'b', value: 2,
+                        parentChain: ['c']
+                    }),
+                    new Field({
+                        id: 'field-3-3',
+                        key: 'c', value: 3,
+                        parentChain: ['c']
+                    }),
+                    new Field({
+                        id: 'field-3-4',
+                        key: 'd', value: {},
+                        parentChain: ['c']
+                    }),
+                    new Field({
+                        id: 'field-3-4-1',
+                        key: 'a', value: 1,
+                        parentChain: ['c', 'd']
+                    }),
+                    new Field({
+                        id: 'field-3-4-2',
+                        key: 'b', value: 2,
+                        parentChain: ['c', 'd']
+                    }),
+                ]);
+            });
+
+            it('throws an error (1)', () => {
+                expect(
+                    () => fieldList.moveField('field-1', ['field-3', 'field-3-1'])
+                ).toThrow(new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move the field due to key overlap'
+                }));
+            });
+
+            it('throws an error (2)', () => {
+                expect(
+                    () => fieldList.moveField('field-1', ['field-3-4', 'field-3-4-1'])
+                ).toThrow(new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move the field due to key overlap'
+                }));
+            });
+
+            it('throws an error (3)', () => {
+                expect(
+                    () => fieldList.moveField('field-3-1', [null, 'field-1'])
+                ).toThrow(new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move the field due to key overlap'
+                }));
+            });
+
+            it('throws an error (4)', () => {
+                expect(
+                    () => fieldList.moveField('field-3-1', ['field-2', 'field-3'])
+                ).toThrow(new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move the field due to key overlap'
+                }));
+            });
+
+            it('ignores source field itself', () => {
+                expect(
+                    () => fieldList.moveField('field-1', ['field-3-4-2', null])
+                ).not.toThrow();
+            });
+        });
     });
 });
