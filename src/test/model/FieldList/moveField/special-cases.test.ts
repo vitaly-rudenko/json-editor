@@ -29,7 +29,9 @@ describe('moveField()', () => {
                 }),
             ]);
             
-            fieldList.moveField('field-1', ['field-4', null]);
+            expect(
+                fieldList.moveField('field-1', ['field-4', null])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -88,7 +90,9 @@ describe('moveField()', () => {
                 }),
             ]);
 
-            fieldList.moveField('field-1', ['field-2-2', 'field-3']);
+            expect(
+                fieldList.moveField('field-1', ['field-2-2', 'field-3'])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -122,7 +126,7 @@ describe('moveField()', () => {
         });
 
         describe('when update is not necessary', () => {
-            it('should return false (moving an object to the end)', () => {
+            it('should return false (moving an object to the end of its children) (1)', () => {
                 const fieldList = new FieldList([
                     new Field({
                         id: 'field-1',
@@ -141,6 +145,52 @@ describe('moveField()', () => {
     
                 expect(
                     fieldList.moveField('field-2', ['field-2-1', null])
+                ).toBe(false);
+            });
+
+            it.skip('should return false (moving an object to the end of its children) (2)', () => {
+                const fieldList = new FieldList([
+                    new Field({
+                        id: 'field-1',
+                        key: 'a', value: '*',
+                    }),
+                    new Field({
+                        id: 'field-2',
+                        key: 'b', value: {},
+                    }),
+                    new Field({
+                        id: 'field-2-1',
+                        key: 'a', value: '*',
+                        parentChain: ['b']
+                    }),
+                    new Field({
+                        id: 'field-2-2',
+                        key: 'b', value: {},
+                        parentChain: ['b']
+                    }),
+                    new Field({
+                        id: 'field-2-2-1',
+                        key: 'a', value: {},
+                        parentChain: ['b', 'b']
+                    }),
+                    new Field({
+                        id: 'field-2-2-2',
+                        key: 'b', value: {},
+                        parentChain: ['b', 'b']
+                    }),
+                    new Field({
+                        id: 'field-2-3',
+                        key: 'c', value: '*',
+                        parentChain: ['b']
+                    }),
+                    new Field({
+                        id: 'field-3',
+                        key: 'c', value: '*',
+                    }),
+                ]);
+    
+                expect(
+                    fieldList.moveField('field-2-2', ['field-2-2-2', 'field-2-3'])
                 ).toBe(false);
             });
         });

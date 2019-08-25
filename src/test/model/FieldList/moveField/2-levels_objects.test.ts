@@ -51,7 +51,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (within first level) (1)', () => {
-            fieldList.moveField('field-5', ['field-2-1', 'field-3']);
+            expect(
+                fieldList.moveField('field-5', ['field-2-1', 'field-3'])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -98,7 +100,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (from 1 level to 2 level) (2)', () => {
-            fieldList.moveField('field-5', ['field-2', 'field-2-1']);
+            expect(
+                fieldList.moveField('field-5', ['field-2', 'field-2-1'])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({

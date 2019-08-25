@@ -23,7 +23,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (1)', () => {
-            fieldList.moveField('field-1', ['field-3', null]);
+            expect(
+                    fieldList.moveField('field-1', ['field-3', null])
+                ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -42,7 +44,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (2)', () => {
-            fieldList.moveField('field-1', ['field-2', 'field-3']);
+            expect(
+                    fieldList.moveField('field-1', ['field-2', 'field-3'])
+                ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -61,7 +65,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (3)', () => {
-            fieldList.moveField('field-3', [null, 'field-1']);
+            expect(
+                    fieldList.moveField('field-3', [null, 'field-1'])
+                ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -80,7 +86,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (4)', () => {
-            fieldList.moveField('field-2', ['field-3', null]);
+            expect(
+                fieldList.moveField('field-2', ['field-3', null])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
@@ -99,7 +107,9 @@ describe('moveField()', () => {
         });
 
         it('moves fields correct (5)', () => {
-            fieldList.moveField('field-2', [null, 'field-1']);
+            expect(
+                fieldList.moveField('field-2', [null, 'field-1'])
+            ).toBe(true);
 
             expect(fieldList.fields).toEqual([
                 new Field({
