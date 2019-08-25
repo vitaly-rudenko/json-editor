@@ -15,7 +15,7 @@ body {
 }
 
 .app > *:not(:last-child) {
-    margin-right: 80px;
+    margin-right: 40px;
 }
 
 .app__field-list {
