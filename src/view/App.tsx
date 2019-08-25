@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { FieldList } from './FieldList';
+import { ObjectBuilderLegacy as ObjectBuilder } from '../model/ObjectBuilderLegacy';
+import { FieldListBuilderLegacy as FieldListBuilder } from '../model/FieldListBuilderLegacy';
+import { FieldListContainer } from './FieldListContainer';
 import { TextEditor } from './TextEditor';
 import './App.css';
-import { ObjectBuilder } from '../model/ObjectBuilder';
-import { FieldListBuilder } from '../model/FieldListBuilder';
 
 // const object = {
 //     hello: 'world',
@@ -13,20 +13,7 @@ import { FieldListBuilder } from '../model/FieldListBuilder';
 //         secretNumber: 123,
 //         nested2: {
 //             jon: 'snow'
-//         },
-//         array: [1,2,[3,4,5,[6,7]],8,9,{
-//             hello: 'world',
-//             array2: [{
-//                 isEnabled3: true,
-//                 nested5: {
-//                     lorem3: 'ipsum',
-//                     secretNumber3: 123,
-//                     nested6: {
-//                         jon: 'snow'
-//                     }
-//                 }
-//             }]
-//         }]
+//         }
 //     },
 //     inception: {
 //         hello2: 'world',
@@ -42,22 +29,14 @@ import { FieldListBuilder } from '../model/FieldListBuilder';
 // };
 
 const object = {
-    a: {
-        b: true,
-        c: {
-            hello: 'world'
-        },
-        d: 'hey there',
-        e: 123
-    },
-    f: {
-        g: [1,2,3,4,5],
-        a: 'jon snow',
-    }
+    hey: true,
+    array1: [1,2,3,4,5],
+    array2: [1,2,3,4,5],
+    hello: 'world',
+    array3: [],
 };
 
 export const App = () => {
-    /** @type {[FieldList, (value: FieldList) => void]} */
     const [fieldList, setFieldList] = useState(
         FieldListBuilder.from(object)
     );
@@ -71,9 +50,9 @@ export const App = () => {
         [fieldList]
     );
 
-    const handleFieldListUpdate = useCallback((updatedFieldList) => {
-        setFieldList(updatedFieldList);
-    }, [setFieldList]);
+    const handleFieldListUpdate = useCallback(() => {
+        setFieldList(fieldList.clone());
+    }, [fieldList, setFieldList]);
 
     const handleJsonChange = useCallback((updatedJson, revert) => {
         let object;
@@ -92,7 +71,7 @@ export const App = () => {
     return (
         <div className="app-wrapper">
             <div className="app">
-                <FieldList
+                <FieldListContainer
                     className="app__field-list"
                     fieldList={fieldList}
                     onFieldListUpdate={handleFieldListUpdate}

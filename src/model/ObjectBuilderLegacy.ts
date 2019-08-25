@@ -1,7 +1,7 @@
 import { FieldType } from './FieldType';
 import { FieldList } from './FieldList';
 
-export class ObjectBuilder {
+export class ObjectBuilderLegacy {
     static fromFieldList(fieldList: FieldList): object {
         const result = {};
 
@@ -14,7 +14,7 @@ export class ObjectBuilder {
 
             for (const [i, parentKey] of field.parentChain.entries()) {
                 if (parent[parentKey] === undefined) {
-                    if (i === field.parentChain.length - 1) {
+                    if (i === field.level - 1) {
                         parent[parentKey] = field.type === FieldType.ARRAY ? [] : {};
                     } else {
                         parent[parentKey] = {};

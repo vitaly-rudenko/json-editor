@@ -1,14 +1,21 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import './TextEditor.css';
 
 export const TextEditor = ({ value: initialValue, onChange, className = '' }) => {
     const [value, setValue] = useState(initialValue);
     const [isFocused, setIsFocused] = useState(false);
+    const selectionRef = useRef({ start: 0, end: 0 });
+    const textAreaRef = useRef();
     const revert = useCallback(() => setValue(initialValue), [initialValue]);
 
     useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
+
+    // useEffect(() => {
+    //     textAreaRef.current.selectionStart = selectionRef.current.start;
+    //     textAreaRef.current.selectionEnd = selectionRef.current.end;
+    // }, [value]);
 
     useEffect(() => {
         const handler = (event) => {
@@ -61,15 +68,22 @@ export const TextEditor = ({ value: initialValue, onChange, className = '' }) =>
         }
     }, []);
 
+    const handleSelect = useCallback((event) => {
+        selectionRef.current.start = event.target.selectionStart;
+        selectionRef.current.end = event.target.selectionEnd;
+    }, [selectionRef]);
+
     return (
         <div className={`text-editor ${className}`}>
             <textarea
+                ref={textAreaRef}
                 className={['text-editor__text-area', isFocused && 'text-editor__text-area--focused'].filter(Boolean).join(' ')}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
                 value={value}
                 onKeyDown={handleKeyDown}
+                onSelect={handleSelect}
                 autoCapitalize="off"
                 autoCorrect="off"
                 autoComplete="off"

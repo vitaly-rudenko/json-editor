@@ -1,7 +1,7 @@
 import { Field, ParentChain } from './Field';
 import { FieldList } from './FieldList';
 
-export class FieldListBuilder {
+export class FieldListBuilderLegacy {
     static from(source: { [x: string]: any } | any[]) {
         if (Array.isArray(source)) {
             throw new Error('Arrays are not supported yet');
