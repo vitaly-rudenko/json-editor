@@ -84,6 +84,13 @@ export class FieldList {
             }
         } else {
             if (previous && previous.isObject) {
+                if (this.startsWith(previous.parentChain, sourceChildren)) {
+                    throw new MovementError({
+                        code: 'BAD_MOVEMENT',
+                        message: 'Could not move an object inside itself'
+                    });
+                }
+
                 updatedSource.parentChain = [...previous.parentChain, previous.key];
             } else if (previous && next) {
                 if ((previous.isArrayItem || previous.isArray) && next.isArrayItem) {
@@ -108,7 +115,7 @@ export class FieldList {
     
                     commonChain.push(precedingChain[i]);
                 }
-    
+
                 if (this.startsWith(commonChain, sourceChildren)) {
                     throw new MovementError({
                         code: 'BAD_MOVEMENT',

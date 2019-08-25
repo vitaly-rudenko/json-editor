@@ -207,6 +207,15 @@ describe('moveField()', () => {
                     message: 'Could not move an object inside itself'
                 }));
             });
+
+            it('throws an error (4)', () => {
+                expect(
+                    () => fieldList.moveField('field-2', ['field-2-2', 'field-2-2-1'])
+                ).toThrow(new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move an object inside itself'
+                }));
+            });
         });
     });
 });
