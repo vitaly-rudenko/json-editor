@@ -5,35 +5,27 @@ import { FieldListContainer } from './FieldListContainer';
 import { TextEditor } from './TextEditor';
 import './App.css';
 
-// const object = {
-//     hello: 'world',
-//     isEnabled: true,
-//     nested: {
-//         lorem: 'ipsum',
-//         secretNumber: 123,
-//         nested2: {
-//             jon: 'snow'
-//         }
-//     },
-//     inception: {
-//         hello2: 'world',
-//         isEnabled2: true,
-//         nested3: {
-//             lorem2: 'ipsum',
-//             secretNumber2: 123,
-//             nested4: {
-//                 jon: 'snow'
-//             }
-//         }
-//     },
-// };
-
 const object = {
-    hey: true,
-    array1: [1,2,3,4,5],
-    array2: [1,2,3,4,5],
     hello: 'world',
-    array3: [],
+    isEnabled: true,
+    nested: {
+        lorem: 'ipsum',
+        secretNumber: 123,
+        nested2: {
+            jon: 'snow'
+        }
+    },
+    inception: {
+        hello2: 'world',
+        isEnabled2: true,
+        nested3: {
+            lorem2: 'ipsum',
+            secretNumber2: 123,
+            nested4: {
+                jon: 'snow'
+            }
+        }
+    },
 };
 
 export const App = () => {

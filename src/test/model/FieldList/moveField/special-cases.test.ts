@@ -148,7 +148,7 @@ describe('moveField()', () => {
                 ).toBe(false);
             });
 
-            it.skip('should return false (moving an object to the end of its children) (2)', () => {
+            it('should return false (moving an object to the end of its children) (2)', () => {
                 const fieldList = new FieldList([
                     new Field({
                         id: 'field-1',
@@ -170,12 +170,12 @@ describe('moveField()', () => {
                     }),
                     new Field({
                         id: 'field-2-2-1',
-                        key: 'a', value: {},
+                        key: 'a', value: "*",
                         parentChain: ['b', 'b']
                     }),
                     new Field({
                         id: 'field-2-2-2',
-                        key: 'b', value: {},
+                        key: 'b', value: "*",
                         parentChain: ['b', 'b']
                     }),
                     new Field({

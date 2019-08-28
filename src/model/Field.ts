@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import { recognizeType, FieldType } from './FieldType';
+import { startsWith, equals } from '../utils/array';
 
 export type Key = string | number;
 export type ParentChain = Key[];
@@ -33,6 +34,27 @@ export class Field {
             parentChain: this.parentChain,
             isArrayItem: this.isArrayItem,
         });
+    }
+
+    isChildOf(field: Field) {
+        return startsWith(this.parentChain, field.chain);
+    }
+
+    isSiblingOf(...fields: Field[]) {
+        return fields.every(
+            f => equals(f.parentChain, this.parentChain)
+        );
+    }
+
+    equals(field: Field) {
+        return this === field || (
+            equals(this.chain, field.chain)
+            && this.value === field.value
+        );
+    }
+
+    get chain() {
+        return [...this.parentChain, this.key];
     }
 
     get isArray() {
