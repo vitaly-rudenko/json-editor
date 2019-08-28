@@ -172,19 +172,16 @@ export class FieldList {
 
     refreshSiblings(field: Field, fields = this.fields) {
         const siblings = this.getSiblings(field, { includeSelf: true }, fields);
-
-        const $fields = [...fields];
-
-        const siblingIndexes = siblings.map(s => $fields.indexOf(s));
-        for (const i of siblingIndexes) {
-            $fields.splice(i, 1);
-        }
         
         const $siblings = siblings.map((sibling, i) => (
             sibling.clone({ key: i })
         ));
 
-        const insertionIndex = Math.min(...siblingIndexes);
+        const insertionIndex = Math.min(
+            ...siblings.map(s => fields.indexOf(s))
+        );
+
+        const $fields = fields.filter(f => !siblings.includes(f));
         $fields.splice(insertionIndex, 0, ...$siblings);
 
         return $fields;
