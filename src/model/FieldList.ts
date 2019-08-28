@@ -88,41 +88,39 @@ export class FieldList {
                     message: 'Could not move an array item to a non-array context'
                 });
             }
-        } else {
-            if (prev && prev.isObject) {
-                if (prev.isChildOf($source)) {
+        } else if (prev && prev.isObject) {
+            if (prev.isChildOf($source)) {
+                throw new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move an object inside itself'
+                });
+            }
+
+            $source.parentChain = prev.chain;
+        } else if (prev && next) {
+            if ((prev.isArrayItem || prev.isArray) && next.isArrayItem) {
+                throw new MovementError({
+                    code: 'BAD_MOVEMENT',
+                    message: 'Could not move a non-array item into an array'
+                });
+            }
+
+            const parent = this.getCommonParent(prev, next);
+
+            if (parent) {
+                if (parent.equals($source) || parent.isChildOf($source)) {
                     throw new MovementError({
                         code: 'BAD_MOVEMENT',
                         message: 'Could not move an object inside itself'
                     });
                 }
 
-                $source.parentChain = prev.chain;
-            } else if (prev && next) {
-                if ((prev.isArrayItem || prev.isArray) && next.isArrayItem) {
-                    throw new MovementError({
-                        code: 'BAD_MOVEMENT',
-                        message: 'Could not move a non-array item into an array'
-                    });
-                }
-
-                const parent = this.getCommonParent(prev, next);
-
-                if (parent) {
-                    if (parent.equals($source) || parent.isChildOf($source)) {
-                        throw new MovementError({
-                            code: 'BAD_MOVEMENT',
-                            message: 'Could not move an object inside itself'
-                        });
-                    }
-
-                    $source.parentChain = parent.chain;
-                } else {
-                    $source.parentChain = [];
-                }
+                $source.parentChain = parent.chain;
             } else {
                 $source.parentChain = [];
             }
+        } else {
+            $source.parentChain = [];
         }
 
         if (!$source.isArrayItem) {
@@ -137,10 +135,7 @@ export class FieldList {
         }
 
         let $fields = [...this.fields];
-        $fields.splice(
-            prevIndex !== null ? (prevIndex + 1) : 0,
-            0, $source
-        );
+        $fields.splice(prevIndex !== null ? (prevIndex + 1) : 0, 0, $source);
         $fields.splice($fields.indexOf(source), 1);
 
         if (source.isContainer) {
@@ -150,26 +145,24 @@ export class FieldList {
                 $fields.splice($fields.indexOf(child), 1);
             }
 
-            const updatedChildren = children.map((child) => {
-                const updatedChild = child.clone();
-
-                updatedChild.parentChain = [
-                    ...$source.parentChain,
-                    $source.key,
-                    ...child.parentChain.slice(source.level + 1),
-                ];
+            const $children = children.map(child => (
+                child.clone({
+                    parentChain: [
+                        ...$source.chain,
+                        ...child.parentChain.slice(source.level + 1),
+                    ]
+                })
+            ));
     
-                return updatedChild;
-            });
-    
-            $fields.splice($fields.indexOf($source) + 1, 0, ...updatedChildren);
+            $fields.splice($fields.indexOf($source) + 1, 0, ...$children);
         }
 
         if ($source.isArrayItem) {
+            $fields = this.refreshSiblings($source, $fields);
+
             if (!$source.isSiblingOf(source)) {
                 $fields = this.refreshSiblings(source, $fields);
             }
-            $fields = this.refreshSiblings($source, $fields);
         }
 
         this.fields = $fields;
@@ -182,24 +175,17 @@ export class FieldList {
 
         const $fields = [...fields];
 
-        let insertionIndex = Number.POSITIVE_INFINITY;
-        for (const sibling of siblings) {
-            const index = $fields.indexOf(sibling);
-            if (index < insertionIndex) {
-                insertionIndex = index;
-            }
-
-            $fields.splice(index, 1);
+        const siblingIndexes = siblings.map(s => $fields.indexOf(s));
+        for (const i of siblingIndexes) {
+            $fields.splice(i, 1);
         }
         
-        const updatedSiblings = siblings.map((sibling, i) => {
-            const updatedSibling = sibling.clone();
-            updatedSibling.key = i;
+        const $siblings = siblings.map((sibling, i) => (
+            sibling.clone({ key: i })
+        ));
 
-            return updatedSibling;
-        });
-
-        $fields.splice(insertionIndex, 0, ...updatedSiblings);
+        const insertionIndex = Math.min(...siblingIndexes);
+        $fields.splice(insertionIndex, 0, ...$siblings);
 
         return $fields;
     }

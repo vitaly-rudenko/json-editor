@@ -5,6 +5,14 @@ import { startsWith, equals } from '../utils/array';
 export type Key = string | number;
 export type ParentChain = Key[];
 
+type FieldProps = {
+    id?: string,
+    key: Key,
+    value: any,
+    parentChain?: ParentChain,
+    isArrayItem?: boolean
+};
+
 export class Field {
     id: string;
     parentChain: ParentChain;
@@ -12,27 +20,22 @@ export class Field {
     value: any;
     isArrayItem: boolean;
 
-    constructor(source: {
-        id?: string,
-        key: Key,
-        value: any,
-        parentChain?: ParentChain,
-        isArrayItem?: boolean
-    }) {
-        this.id = source.id || shortid();
-        this.parentChain = [...source.parentChain || []];
-        this.key = source.key;
-        this.value = source.value;
-        this.isArrayItem = Boolean(source.isArrayItem);
+    constructor(props: FieldProps) {
+        this.id = props.id || shortid();
+        this.parentChain = [...props.parentChain || []];
+        this.key = props.key;
+        this.value = props.value;
+        this.isArrayItem = Boolean(props.isArrayItem);
     }
 
-    clone() {
+    clone(props: Partial<FieldProps> = {}) {
         return new Field({
             id: this.id,
             key: this.key,
             value: this.value,
             parentChain: this.parentChain,
             isArrayItem: this.isArrayItem,
+            ...props,
         });
     }
 
