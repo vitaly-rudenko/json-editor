@@ -260,7 +260,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-1-1', [null, 'field-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move an array item to a non-array context'
                     })
                 );
@@ -271,7 +271,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-1-1', ['field-2', 'field-3'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move an array item to a non-array context'
                     })
                 );
@@ -282,7 +282,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-1-1', ['field-3', 'field-3-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move an array item to a non-array context'
                     })
                 );
@@ -293,7 +293,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-1-1', ['field-3-1', null])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move an array item to a non-array context'
                     })
                 );
@@ -345,7 +345,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-2', ['field-1', 'field-1-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move a non-array item into an array'
                     })
                 );
@@ -356,7 +356,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-3', ['field-1', 'field-1-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move a non-array item into an array'
                     })
                 );
@@ -367,7 +367,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-4', ['field-1', 'field-1-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move a non-array item into an array'
                     })
                 );
@@ -378,7 +378,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-5', ['field-1', 'field-1-1'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move a non-array item into an array'
                     })
                 );
@@ -389,7 +389,7 @@ describe('moveField()', () => {
                     () => fieldList.moveField('field-2', ['field-1-1', 'field-1-2'])
                 ).toThrow(
                     new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'INVALID_CONTEXT',
                         message: 'Could not move a non-array item into an array'
                     })
                 );

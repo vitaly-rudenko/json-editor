@@ -2,7 +2,7 @@ export class MovementError extends Error {
     readonly code: string;
 
     constructor({ code, message }: { code: string, message?: string }) {
-        super(message || 'Unexpected error');
+        super(`[${code}] ${message || 'Unexpected error'}`);
 
         this.code = code;
 

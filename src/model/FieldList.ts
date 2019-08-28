@@ -84,14 +84,14 @@ export class FieldList {
             }
             else {
                 throw new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'INVALID_CONTEXT',
                     message: 'Could not move an array item to a non-array context'
                 });
             }
         } else if (prev && prev.isObject) {
             if (prev.isChildOf($source)) {
                 throw new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'CYCLIC_NESTING',
                     message: 'Could not move an object inside itself'
                 });
             }
@@ -100,7 +100,7 @@ export class FieldList {
         } else if (prev && next) {
             if ((prev.isArrayItem || prev.isArray) && next.isArrayItem) {
                 throw new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'INVALID_CONTEXT',
                     message: 'Could not move a non-array item into an array'
                 });
             }
@@ -110,7 +110,7 @@ export class FieldList {
             if (parent) {
                 if (parent.equals($source) || parent.isChildOf($source)) {
                     throw new MovementError({
-                        code: 'BAD_MOVEMENT',
+                        code: 'CYCLIC_NESTING',
                         message: 'Could not move an object inside itself'
                     });
                 }
@@ -128,7 +128,7 @@ export class FieldList {
 
             if (siblings.some(s => s.key === $source.key)) {
                 throw new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'KEY_OVERLAP',
                     message: 'Could not move the field due to key overlap'
                 }); 
             }

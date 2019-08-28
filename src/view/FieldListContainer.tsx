@@ -40,7 +40,7 @@ export const FieldListContainer: FunctionComponent<{
             }
         } catch (error) {
             if (error instanceof MovementError) {
-                console.warn(`[${error.code}] ${error.message}`);
+                console.warn(error.message);
             } else {
                 throw error;
             }

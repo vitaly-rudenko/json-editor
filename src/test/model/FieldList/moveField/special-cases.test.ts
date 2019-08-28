@@ -235,7 +235,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-2', ['field-2-1', 'field-2-2'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'CYCLIC_NESTING',
                     message: 'Could not move an object inside itself'
                 }));
             });
@@ -244,7 +244,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-2', ['field-2-2-1', 'field-2-2-2'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'CYCLIC_NESTING',
                     message: 'Could not move an object inside itself'
                 }));
             });
@@ -253,7 +253,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-2-2', ['field-2-2-1', 'field-2-2-2'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'CYCLIC_NESTING',
                     message: 'Could not move an object inside itself'
                 }));
             });
@@ -262,7 +262,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-2', ['field-2-2', 'field-2-2-1'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'CYCLIC_NESTING',
                     message: 'Could not move an object inside itself'
                 }));
             });
@@ -322,7 +322,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-1', ['field-3', 'field-3-1'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'KEY_OVERLAP',
                     message: 'Could not move the field due to key overlap'
                 }));
             });
@@ -331,7 +331,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-1', ['field-3-4', 'field-3-4-1'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'KEY_OVERLAP',
                     message: 'Could not move the field due to key overlap'
                 }));
             });
@@ -340,7 +340,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-3-1', [null, 'field-1'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'KEY_OVERLAP',
                     message: 'Could not move the field due to key overlap'
                 }));
             });
@@ -349,7 +349,7 @@ describe('moveField()', () => {
                 expect(
                     () => fieldList.moveField('field-3-1', ['field-2', 'field-3'])
                 ).toThrow(new MovementError({
-                    code: 'BAD_MOVEMENT',
+                    code: 'KEY_OVERLAP',
                     message: 'Could not move the field due to key overlap'
                 }));
             });
