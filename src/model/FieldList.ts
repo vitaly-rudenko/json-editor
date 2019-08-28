@@ -141,9 +141,7 @@ export class FieldList {
         if (source.isContainer) {
             const children = this.getChildren(source);
 
-            for (const child of children) {
-                $fields.splice($fields.indexOf(child), 1);
-            }
+            $fields = $fields.filter(f => !children.includes(f));
 
             const $children = children.map(child => (
                 child.clone({
@@ -237,10 +235,6 @@ export class FieldList {
     }
 
     isValidIndex(index: number) {
-        return index >= 0 && index < this.fieldCount;
-    }
-
-    get fieldCount() {
-        return this.fields.length;
+        return index >= 0 && index < this.fields.length;
     }
 }

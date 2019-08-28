@@ -51,8 +51,10 @@ export class Field {
 
     equals(field: Field) {
         return this === field || (
-            equals(this.chain, field.chain)
+            this.id === field.id
             && this.value === field.value
+            && this.isArrayItem === field.isArrayItem
+            && equals(this.chain, field.chain)
         );
     }
 
@@ -66,10 +68,6 @@ export class Field {
 
     get isObject() {
         return this.type === FieldType.OBJECT;
-    }
-
-    get isPrimitive() {
-        return this.type === FieldType.PRIMITIVE;
     }
 
     get isContainer() {
