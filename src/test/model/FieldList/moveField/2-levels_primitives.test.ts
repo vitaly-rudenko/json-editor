@@ -45,7 +45,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (from 1 level to 2 level) (1)', () => {
+        it('moves fields correctly (from 1 level to 2 level) (1)', () => {
             expect(
                 fieldList.moveField('field-1', ['field-3-1', 'field-3-2'])
             ).toBe(true);
@@ -90,7 +90,7 @@ describe('moveField()', () => {
             ]);
         });
         
-        it('moves fields correct (from 1 level to 2 level) (2)', () => {
+        it('moves fields correctly (from 1 level to 2 level) (2)', () => {
             expect(
                 fieldList.moveField('field-1', ['field-3-2', 'field-4'])
             ).toBe(true);
@@ -134,7 +134,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (from 1 level to 2 level) (3)', () => {
+        it('moves fields correctly (from 1 level to 2 level) (3)', () => {
             expect(
             fieldList.moveField('field-1', ['field-5-1', null])
         ).toBe(true);
@@ -178,7 +178,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (from 1 level to 2 level) (4)', () => {
+        it('moves fields correctly (from 1 level to 2 level) (4)', () => {
             expect(
             fieldList.moveField('field-1', ['field-3', 'field-3-1'])
         ).toBe(true);
@@ -223,7 +223,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (from 2 level to 1 level) (1)', () => {
+        it('moves fields correctly (from 2 level to 1 level) (1)', () => {
             expect(
             fieldList.moveField('field-3-1', [null, 'field-1'])
         ).toBe(true);

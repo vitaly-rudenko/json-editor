@@ -22,7 +22,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (1)', () => {
+        it('moves fields correctly (1)', () => {
             expect(
                     fieldList.moveField('field-1', ['field-3', null])
                 ).toBe(true);
@@ -43,7 +43,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (2)', () => {
+        it('moves fields correctly (2)', () => {
             expect(
                     fieldList.moveField('field-1', ['field-2', 'field-3'])
                 ).toBe(true);
@@ -64,7 +64,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (3)', () => {
+        it('moves fields correctly (3)', () => {
             expect(
                     fieldList.moveField('field-3', [null, 'field-1'])
                 ).toBe(true);
@@ -85,7 +85,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (4)', () => {
+        it('moves fields correctly (4)', () => {
             expect(
                 fieldList.moveField('field-2', ['field-3', null])
             ).toBe(true);
@@ -106,7 +106,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct (5)', () => {
+        it('moves fields correctly (5)', () => {
             expect(
                 fieldList.moveField('field-2', [null, 'field-1'])
             ).toBe(true);

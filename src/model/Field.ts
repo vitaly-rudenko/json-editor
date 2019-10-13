@@ -1,4 +1,6 @@
 import shortid from 'shortid';
+import { oneLineTrim } from 'common-tags';
+
 import { recognizeType, FieldType } from './FieldType';
 import { startsWith, equals } from '../utils/array';
 
@@ -80,5 +82,17 @@ export class Field {
 
     get level() {
         return this.parentChain.length;
+    }
+
+    toString() {
+        return oneLineTrim`
+            ${this.constructor.name}{
+                id=${this.id},
+                key=${this.key},
+                value=${this.isArray ? '[]' : this.isObject ? '{}' : `'${this.value}'`},
+                parentChain=[${this.parentChain.join(', ')}],
+                isArrayItem=${this.isArrayItem}
+            }
+        `;
     }
 }

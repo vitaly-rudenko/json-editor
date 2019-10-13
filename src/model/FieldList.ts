@@ -70,10 +70,16 @@ export class FieldList {
             return false;
         }
 
-        const $source = source.clone();
+        let $source = source.clone();
 
         if ($source.isArrayItem) {
-            if (prev && prev.isArray) {
+            if (prev && prev.isChildOf($source)) {
+                throw new MovementError({
+                    code: 'CYCLIC_NESTING',
+                    message: 'Could not move an array inside itself'
+                });
+            }
+            else if (prev && prev.isArray) {
                 $source.parentChain = prev.chain;
             }
             else if (prev && prev.isArrayItem) {
@@ -138,6 +144,17 @@ export class FieldList {
         $fields.splice(prevIndex !== null ? (prevIndex + 1) : 0, 0, $source);
         $fields.splice($fields.indexOf(source), 1);
 
+        if ($source.isArrayItem) {
+            $fields = this.refreshSiblings($source, $fields);
+
+            if (!$source.isSiblingOf(source)) {
+                $fields = this.refreshSiblings(source, $fields);
+            }
+
+            // source item has been re-created
+            $source = $fields.find(f => f.id === source.id) as Field;
+        }
+
         if (source.isContainer) {
             const children = this.getChildren(source);
 
@@ -151,16 +168,8 @@ export class FieldList {
                     ]
                 })
             ));
-    
+
             $fields.splice($fields.indexOf($source) + 1, 0, ...$children);
-        }
-
-        if ($source.isArrayItem) {
-            $fields = this.refreshSiblings($source, $fields);
-
-            if (!$source.isSiblingOf(source)) {
-                $fields = this.refreshSiblings(source, $fields);
-            }
         }
 
         this.fields = $fields;
@@ -169,18 +178,38 @@ export class FieldList {
     }
 
     refreshSiblings(field: Field, fields = this.fields) {
-        const siblings = this.getSiblings(field, { includeSelf: true }, fields);
-        
-        const $siblings = siblings.map((sibling, i) => (
-            sibling.clone({ key: i })
+        const siblings = this
+            .getSiblings(field, { includeSelf: true }, fields)
+            .map<[Field, Field[]]>(
+                sibling => [sibling, this.getChildren(sibling, fields)]
+            );
+
+        const $siblings = siblings.map<[Field, Field[]]>(([sibling, children], i) => (
+            [
+                sibling.clone({ key: i }),
+                children.map(child => (
+                    child.clone({
+                        parentChain: [
+                            ...sibling.chain.slice(0, -1),
+                            i,
+                            ...child.parentChain.slice(sibling.level + 1)
+                        ]
+                    })
+                ))
+            ]
         ));
 
         const insertionIndex = Math.min(
-            ...siblings.map(s => fields.indexOf(s))
+            ...siblings.map(([sibling]) => fields.indexOf(sibling))
         );
 
-        const $fields = fields.filter(f => !siblings.includes(f));
-        $fields.splice(insertionIndex, 0, ...$siblings);
+        const $fields = fields.filter(field => (
+            !siblings.some(([sibling, children]) => (
+                sibling === field || children.includes(field)
+            ))
+        ));
+
+        $fields.splice(insertionIndex, 0, ...$siblings.flatMap(([sibling, children]) => [sibling, ...children]));
 
         return $fields;
     }

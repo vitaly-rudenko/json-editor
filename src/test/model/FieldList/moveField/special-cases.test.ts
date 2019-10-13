@@ -4,7 +4,7 @@ import { MovementError } from '../../../../model/MovementError';
 
 describe('moveField()', () => {
     describe('special cases', () => {
-        it('moves fields correct (from 1 level to 2 level) (to empty object) (1)', () => {
+        it('moves fields correctly (from 1 level to 2 level) (to empty object) (1)', () => {
             const fieldList = new FieldList([
                 new Field({
                     id: 'field-1',
@@ -59,7 +59,7 @@ describe('moveField()', () => {
             ]);
         });
 
-        it('moves fields correct between two object within first level', () => {
+        it('moves fields correctly between two object within first level', () => {
             const fieldList = new FieldList([
                 new Field({
                     id: 'field-1',
